@@ -6,7 +6,7 @@
 /*   By: dkremer <dkremer@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 16:28:48 by dkremer           #+#    #+#             */
-/*   Updated: 2024/06/03 16:44:13 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/06/04 15:12:48 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,13 @@ size_t	get_current_time(void)
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 
-int	ft_usleep(size_t milliseconds)
+void	ft_usleep(size_t milliseconds, t_data *data)
 {
 	size_t	start;
 
 	start = get_current_time();
-	while ((get_current_time() - start) < milliseconds)
-		usleep(500);
-	return (0);
+	while ((get_current_time() - start < milliseconds) && data->died == false)
+		usleep(200);
 }
 
 int	ft_isdigit(const char *c)
@@ -64,8 +63,8 @@ int	ft_atoi(const char *str)
 	i = 0;
 	sgn = 1;
 	res = 0;
-	while (str[i] == ' ' || str[i] == '\n' || str[i] == '\t'
-		|| str[i] == '\r' || str[i] == '\v' || str[i] == '\f')
+	while (str[i] == ' ' || str[i] == '\n' || str[i] == '\t' || str[i] == '\r'
+		|| str[i] == '\v' || str[i] == '\f')
 		i++;
 	if (str[i] == '-' || str[i] == '+')
 	{
