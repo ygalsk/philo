@@ -6,7 +6,7 @@
 #    By: dkremer <dkremer@student.42heilbronn.de>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/03 13:57:13 by dkremer           #+#    #+#              #
-#    Updated: 2024/06/03 17:04:59 by dkremer          ###   ########.fr        #
+#    Updated: 2024/06/04 15:57:53 by dkremer          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ NAME     = philo
 # Compiler and flags
 CC       = cc
 CFLAGS   = -Wall -Werror -Wextra -g
+LDFLAGS = -lpthread
 
 # Source and object directories
 BINDIR   = bin
@@ -32,17 +33,12 @@ all: $(NAME)
 .SILENT:
 
 $(NAME): $(OBJS) 
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LDFLAGS)
 	echo $(GREEN)"Building $(NAME)"$(DEFAULT);
 
 # Rule to compile source files to object files in the bin directory
 $(BINDIR)/%.o: ./%.c | $(BINDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
-
-# Update Submodule
-
-submodule:
-	git submodule update --init --recursive
 
 # Create the bin directory if it does not exist
 $(BINDIR):
@@ -51,14 +47,12 @@ $(BINDIR):
 # Remove all object files
 clean:
 	rm -f $(BINDIR)/*.o
-	make -C libft clean
 	echo $(RED)"Removing $(NAME) object files"$(DEFAULT);
 
 # Remove all files
 fclean: clean
 	rm -f $(NAME)
 	rm -rf $(BINDIR)
-	make -C libft fclean
 	echo $(RED)"Removing $(NAME)"$(DEFAULT);
 
 # Rebuild everything
