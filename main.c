@@ -6,7 +6,7 @@
 /*   By: dkremer <dkremer@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 15:31:44 by dkremer           #+#    #+#             */
-/*   Updated: 2024/06/04 15:59:36 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/07/22 19:10:27 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,11 @@ int	main(int argc, char **argv)
 {
 	t_data	data;
 
-	if (argc < 5 || argc > 6)
+	if (argc < 4 || argc > 5)
 		return (error("INVALID NUMBER OF ARGUMENTS!\n"));
-	if (argc == 6 && ft_atoi(argv[5]) < 1)
+	if (argc == 5 && ft_atoi(argv[4]) < 1)
 		return (0);
-	if (check_args(argc, argv))
+	if (!check_args(argc, argv))
 		return (error("INVALID TYPE OF ARGUMENTS! USE INT_VALUES!\n"));
 	if (init_data(&data, argc, argv))
 		return (error("INIT ERROR!\n"));

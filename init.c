@@ -6,7 +6,7 @@
 /*   By: dkremer <dkremer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 13:52:21 by dkremer           #+#    #+#             */
-/*   Updated: 2024/06/04 18:46:36 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/07/22 15:25:39 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static int	init_philo(t_data *data)
 		data->philo[i].meal_c = 0;
 		data->philo[i].id = i + 1;
 		data->philo[i].eating = false;
-		data->philo[i].t_start = get_current_time();
+		data->philo[i].start = get_current_time();
 		data->philo[i].last_eat = get_current_time();
 		data->philo[i].data = data;
 		data->philo[i].r_fork = &data->forks[data->philo[i].id - 1];
