@@ -6,7 +6,7 @@
 /*   By: dkremer <dkremer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:53:45 by dkremer           #+#    #+#             */
-/*   Updated: 2024/06/04 18:32:19 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/07/23 21:52:45 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	meal_check(t_data *data)
 	i = 0;
 	all_ate = 0;
 	philo_d = data->philo;
-	if (data->m_count == 0)
+	if (data->m_count == -1)
 		return (0);
 	while (i < data->philo_n)
 	{

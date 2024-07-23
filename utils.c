@@ -6,7 +6,7 @@
 /*   By: dkremer <dkremer@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 16:28:48 by dkremer           #+#    #+#             */
-/*   Updated: 2024/06/04 15:12:48 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/07/23 16:20:18 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ size_t	get_current_time(void)
 
 	if (gettimeofday(&time, NULL) == -1)
 		write(2, "gettimeofday() error\n", 22);
-	return (time.tv_sec * 1000 + time.tv_usec / 1000);
+	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
 void	ft_usleep(size_t milliseconds, t_data *data)
@@ -26,8 +26,17 @@ void	ft_usleep(size_t milliseconds, t_data *data)
 	size_t	start;
 
 	start = get_current_time();
-	while ((get_current_time() - start < milliseconds) && data->died == false)
+	while ((get_current_time() - start < milliseconds))
+	{
+		pthread_mutex_lock(&data->dead);
+		if (data->died == true)
+		{
+			pthread_mutex_unlock(&data->dead);
+			return ;
+		}
+		pthread_mutex_unlock(&data->dead);
 		usleep(200);
+	}
 }
 
 int	ft_isdigit(const char *c)

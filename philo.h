@@ -6,7 +6,7 @@
 /*   By: dkremer <dkremer@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 15:28:22 by dkremer           #+#    #+#             */
-/*   Updated: 2024/07/22 17:25:35 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/07/23 21:52:14 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ typedef struct s_data
 	int				t_eat;
 	int				t_sleep;
 	int				m_count;
-	long int		t_start;
 	t_philo			*philo;
 	bool			died;
 	bool			fork_a;

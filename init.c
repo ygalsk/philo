@@ -6,7 +6,7 @@
 /*   By: dkremer <dkremer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 13:52:21 by dkremer           #+#    #+#             */
-/*   Updated: 2024/07/22 15:25:39 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/07/23 21:52:51 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	init_data(t_data *data, int argc, char **argv)
 	if (argc == 6)
 		data->m_count = ft_atoi(argv[5]);
 	else
-		data->m_count = 0;
+		data->m_count = -1;
 	return (0);
 }
 
@@ -40,6 +40,8 @@ static int	init_mutex(t_data *data)
 	if (pthread_mutex_init(&data->eat, NULL))
 		return (1);
 	if (pthread_mutex_init(&data->msg, NULL))
+		return (1);
+	if (pthread_mutex_init(&data->dead, NULL))
 		return (1);
 	return (0);
 }
