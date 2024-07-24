@@ -6,7 +6,7 @@
 #    By: dkremer <dkremer@student.42heilbronn.de>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/03 13:57:13 by dkremer           #+#    #+#              #
-#    Updated: 2024/07/23 22:50:06 by dkremer          ###   ########.fr        #
+#    Updated: 2024/07/23 22:53:47 by dkremer          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME     = philo
 
 # Compiler and flags
 CC       = cc
-CFLAGS   = -Wall -Werror -Wextra -g3 -fsanitize=thread
+CFLAGS   = -Wall -Werror -Wextra -g3
 LDFLAGS = -lpthread
 
 # Source and object directories
