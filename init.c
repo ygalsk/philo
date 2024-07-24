@@ -6,11 +6,11 @@
 /*   By: dkremer <dkremer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 13:52:21 by dkremer           #+#    #+#             */
-/*   Updated: 2024/07/23 21:52:51 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/07/24 17:18:15 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "includes/philo.h"
 
 int	init_data(t_data *data, int argc, char **argv)
 {
@@ -18,6 +18,7 @@ int	init_data(t_data *data, int argc, char **argv)
 	data->t_die = ft_atoi(argv[2]);
 	data->t_eat = ft_atoi(argv[3]);
 	data->t_sleep = ft_atoi(argv[4]);
+	data->total_meals = 0;
 	data->died = false;
 	if (argc == 6)
 		data->m_count = ft_atoi(argv[5]);
@@ -55,7 +56,7 @@ static int	init_philo(t_data *data)
 	{
 		data->philo[i].meal_c = 0;
 		data->philo[i].id = i + 1;
-		data->philo[i].eating = false;
+		data->philo[i].state = THINKING;
 		data->philo[i].start = get_current_time();
 		data->philo[i].last_eat = get_current_time();
 		data->philo[i].data = data;

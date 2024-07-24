@@ -1,33 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   philo_types.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkremer <dkremer@student.42heilbronn.de>   +#+  +:+       +#+        */
+/*   By: dkremer <dkremer@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/03 15:28:22 by dkremer           #+#    #+#             */
-/*   Updated: 2024/07/23 21:52:14 by dkremer          ###   ########.fr       */
+/*   Created: 2024/07/24 13:22:44 by dkremer           #+#    #+#             */
+/*   Updated: 2024/07/24 17:15:19 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+#ifndef PHILO_TYPES_H
+# define PHILO_TYPES_H
 
-# include <pthread.h>
-# include <stdbool.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <sys/time.h>
-# include <unistd.h>
+# include "philo.h"
+
+typedef enum e_state
+{
+	THINKING,
+	EATING,
+	SLEEPING,
+	DEAD,
+	FORKING,
+}	t_state;
 
 typedef struct s_philo
 {
 	int				id;
 	int				meal_c;
-	bool			eating;
 	long int		last_eat;
 	long int		start;
 	struct s_data	*data;
+	t_state			state;
 	pthread_t		thread;
 	pthread_mutex_t	*r_fork;
 	pthread_mutex_t	*l_fork;
@@ -40,6 +44,7 @@ typedef struct s_data
 	int				t_eat;
 	int				t_sleep;
 	int				m_count;
+	int				total_meals;
 	t_philo			*philo;
 	bool			died;
 	bool			fork_a;
@@ -51,16 +56,4 @@ typedef struct s_data
 	pthread_mutex_t	dead;
 }					t_data;
 
-size_t				get_current_time(void);
-void				ft_usleep(size_t milliseconds, t_data *data);
-int					ft_isdigit(const char *c);
-size_t				ft_strlen(const char *s);
-int					ft_atoi(const char *str);
-int					error(char *msg);
-int					init_thread(t_data *data);
-int					init_data(t_data *data, int argc, char **argv);
-int					work(t_data *data);
-void				free_and_exit(t_data *data);
-void				philo_msg(char *msg, t_philo *philo, int id);
-void				*philo(void *philo);
 #endif

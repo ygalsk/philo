@@ -6,30 +6,28 @@
 /*   By: dkremer <dkremer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:53:45 by dkremer           #+#    #+#             */
-/*   Updated: 2024/07/23 21:52:45 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/07/24 17:39:13 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "includes/philo.h"
+#include "includes/philo_types.h"
 
 int	time_check(t_data *data)
 {
-	t_philo	*philo_d;
 	int		i;
 	long	now;
 
 	i = 0;
-	philo_d = data->philo;
 	while (i < data->philo_n)
 	{
 		pthread_mutex_lock(&data->eat);
 		now = get_current_time();
-		if (now - philo_d[i].last_eat >= \
-				data->t_die && \
-			philo_d[i].eating == false)
+		if (now - data->philo[i].last_eat >= data->t_die \
+					&& data->philo[i].state != EATING)
 		{
 			pthread_mutex_unlock(&data->eat);
-			philo_msg("died", &philo_d[i], philo_d[i].id);
+			philo_msg(&data->philo[i], data->philo[i].id, DEAD);
 			return (1);
 		}
 		pthread_mutex_unlock(&data->eat);

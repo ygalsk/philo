@@ -6,13 +6,11 @@
 /*   By: dkremer <dkremer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 16:51:32 by dkremer           #+#    #+#             */
-/*   Updated: 2024/07/23 22:19:55 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/07/24 17:08:27 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
-#include <pthread.h>
-#include <stdio.h>
+#include "includes/philo.h"
 
 int	error(char *msg)
 {
@@ -41,14 +39,21 @@ void	free_and_exit(t_data *data)
 	exit(1);
 }
 
-void	philo_msg(char *msg, t_philo *philo, int id)
+void	philo_msg(t_philo *philo, int id, t_state state)
 {
-	// pthread_mutex_lock(&philo->data->dead);
-	if (philo->data->died == false)
-	{
-		pthread_mutex_lock(&philo->data->msg);
-		printf("%ld %d %s\n", get_current_time() - philo->start, id, msg);
-		pthread_mutex_unlock(&philo->data->msg);
-	}
-	pthread_mutex_unlock(&philo->data->dead);
+	long int	time;
+
+	time = get_current_time() - philo->start;
+	pthread_mutex_lock(&philo->data->msg);
+	if (state == DEAD)
+		printf("%ld %d died\n", time, id);
+	else if (state == FORKING)
+		printf("%ld %d has taken a fork\n", time, id);
+	else if (state == EATING)
+		printf("%ld %d is eating\n", time, id);
+	else if (state == SLEEPING)
+		printf("%ld %d is sleeping\n", time, id);
+	else if (state == THINKING)
+		printf("%ld %d is thinking\n", time, id);
+	pthread_mutex_unlock(&philo->data->msg);
 }
