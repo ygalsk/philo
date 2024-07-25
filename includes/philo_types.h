@@ -6,7 +6,7 @@
 /*   By: dkremer <dkremer@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 13:22:44 by dkremer           #+#    #+#             */
-/*   Updated: 2024/07/24 17:15:19 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/07/25 01:34:37 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,12 @@ typedef struct s_data
 	int				t_eat;
 	int				t_sleep;
 	int				m_count;
+	int				died;
+	int				error;
 	int				total_meals;
 	t_philo			*philo;
-	bool			died;
-	bool			fork_a;
-	bool			philo_a;
 	pthread_mutex_t	*forks;	
 	pthread_mutex_t	msg;
-	pthread_mutex_t	stop;
 	pthread_mutex_t	eat;
 	pthread_mutex_t	dead;
 }					t_data;

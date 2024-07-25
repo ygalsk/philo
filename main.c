@@ -6,11 +6,13 @@
 /*   By: dkremer <dkremer@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 15:31:44 by dkremer           #+#    #+#             */
-/*   Updated: 2024/07/24 17:19:51 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/07/25 00:21:57 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/philo.h"
+#include <stdio.h>
+#include <unistd.h>
 
 int	check_args(int argc, char **argv)
 {
@@ -40,10 +42,16 @@ int	main(int argc, char **argv)
 		return (0);
 	if (check_args(argc, argv))
 		return (error("INVALID TYPE OF ARGUMENTS! USE INT_VALUES!\n"));
+	if (ft_atoi(argv[1]) == 1)
+	{
+		printf("0 1 has taken fork\n");
+		usleep(ft_atoi(argv[3]));
+		printf("%d 1 has died\n", ft_atoi(argv[2]));
+		return (0);
+	}
 	if (init_data(&data, argc, argv))
 		return (error("INIT ERROR!\n"));
 	if (init_thread(&data))
 		return (error("THREAD ERROR!\n"));
-	work(&data);
-	return (0);
+	return (work(&data));
 }

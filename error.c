@@ -6,7 +6,7 @@
 /*   By: dkremer <dkremer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 16:51:32 by dkremer           #+#    #+#             */
-/*   Updated: 2024/07/24 17:08:27 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/07/25 02:42:23 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	free_and_exit(t_data *data)
 	int	i;
 
 	i = 0;
-	if (data->philo_a)
+	if (data->philo)
 	{
 		while (i < data->philo_n)
 		{
@@ -33,27 +33,28 @@ void	free_and_exit(t_data *data)
 			i++;
 		}
 		free(data->philo);
+		data->philo = NULL;
 	}
-	if (data->fork_a)
+	if (data->forks)
+	{
 		free(data->forks);
+		data->forks = NULL;
+	}
 	exit(1);
 }
 
-void	philo_msg(t_philo *philo, int id, t_state state)
+void	philo_msg(t_philo *philo, int id)
 {
-	long int	time;
-
-	time = get_current_time() - philo->start;
 	pthread_mutex_lock(&philo->data->msg);
-	if (state == DEAD)
-		printf("%ld %d died\n", time, id);
-	else if (state == FORKING)
-		printf("%ld %d has taken a fork\n", time, id);
-	else if (state == EATING)
-		printf("%ld %d is eating\n", time, id);
-	else if (state == SLEEPING)
-		printf("%ld %d is sleeping\n", time, id);
-	else if (state == THINKING)
-		printf("%ld %d is thinking\n", time, id);
+	if (philo->state == DEAD)
+		printf("%ld %d died\n", get_current_time() - philo->start, id);
+	else if (philo->state == FORKING)
+		printf("%ld %d has taken a fork\n", get_current_time() - philo->start, id);
+	else if (philo->state == EATING)
+		printf("%ld %d is eating\n", get_current_time() - philo->start, id);
+	else if (philo->state == SLEEPING)
+		printf("%ld %d is sleeping\n", get_current_time() - philo->start, id);
+	else if (philo->state == THINKING)
+		printf("%ld %d is thinking\n", get_current_time() - philo->start, id);
 	pthread_mutex_unlock(&philo->data->msg);
 }

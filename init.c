@@ -6,7 +6,7 @@
 /*   By: dkremer <dkremer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 13:52:21 by dkremer           #+#    #+#             */
-/*   Updated: 2024/07/24 17:18:15 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/07/25 01:34:43 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@ int	init_data(t_data *data, int argc, char **argv)
 	data->t_die = ft_atoi(argv[2]);
 	data->t_eat = ft_atoi(argv[3]);
 	data->t_sleep = ft_atoi(argv[4]);
+	data->error = 0;
 	data->total_meals = 0;
-	data->died = false;
+	data->died = 0;
 	if (argc == 6)
 		data->m_count = ft_atoi(argv[5]);
 	else
@@ -75,14 +76,12 @@ int	init_thread(t_data *data)
 	data->philo = malloc(sizeof(t_philo) * data->philo_n);
 	if (!data->philo)
 		return (1);
-	data->philo_a = true;
 	data->forks = malloc(sizeof(pthread_mutex_t) * data->philo_n);
 	if (!data->forks)
 	{
 		free(data->philo);
 		return (1);
 	}
-	data->fork_a = true;
 	if (init_mutex(data))
 	{
 		free(data->philo);

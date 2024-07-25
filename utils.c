@@ -6,11 +6,11 @@
 /*   By: dkremer <dkremer@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 16:28:48 by dkremer           #+#    #+#             */
-/*   Updated: 2024/07/23 16:20:18 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/07/25 02:33:10 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "includes/philo.h"
 
 size_t	get_current_time(void)
 {
