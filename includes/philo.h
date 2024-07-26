@@ -6,7 +6,7 @@
 /*   By: dkremer <dkremer@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 15:28:22 by dkremer           #+#    #+#             */
-/*   Updated: 2024/07/25 02:52:19 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/07/26 17:50:40 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int		init_thread(t_data *data);
 int		init_data(t_data *data, int argc, char **argv);
 int		work(t_data *data);
 void	free_and_exit(t_data *data);
-void	philo_msg(t_philo *philo, int id);
+void	philo_msg(t_philo *philo);
 void	*philo(void *philo);
 int		meal_check(t_data *data);
 int		time_check(t_data *data);

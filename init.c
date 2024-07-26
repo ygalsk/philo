@@ -6,7 +6,7 @@
 /*   By: dkremer <dkremer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 13:52:21 by dkremer           #+#    #+#             */
-/*   Updated: 2024/07/25 01:34:43 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/07/26 17:50:26 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ int	init_data(t_data *data, int argc, char **argv)
 	data->t_eat = ft_atoi(argv[3]);
 	data->t_sleep = ft_atoi(argv[4]);
 	data->error = 0;
-	data->total_meals = 0;
 	data->died = 0;
+	data->total_meals = 0;
 	if (argc == 6)
 		data->m_count = ft_atoi(argv[5]);
 	else
@@ -39,11 +39,9 @@ static int	init_mutex(t_data *data)
 			return (1);
 		i++;
 	}
-	if (pthread_mutex_init(&data->eat, NULL))
-		return (1);
 	if (pthread_mutex_init(&data->msg, NULL))
 		return (1);
-	if (pthread_mutex_init(&data->dead, NULL))
+	if (pthread_mutex_init(&data->state_mutex, NULL))
 		return (1);
 	return (0);
 }
@@ -55,8 +53,9 @@ static int	init_philo(t_data *data)
 	i = 0;
 	while (i < data->philo_n)
 	{
-		data->philo[i].meal_c = 0;
 		data->philo[i].id = i + 1;
+		data->philo[i].meal_c = 0;
+		data->philo[i].meal_complete = 0;
 		data->philo[i].state = THINKING;
 		data->philo[i].start = get_current_time();
 		data->philo[i].last_eat = get_current_time();

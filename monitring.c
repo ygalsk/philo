@@ -6,60 +6,53 @@
 /*   By: dkremer <dkremer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:53:45 by dkremer           #+#    #+#             */
-/*   Updated: 2024/07/25 02:59:42 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/07/26 17:53:39 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/philo.h"
-#include <pthread.h>
 
-int	time_check(t_data *data)
+int time_check(t_data *data)
 {
-	int		i;
-	long	now;
+	int i;
+	long now;
 
 	i = 0;
 	while (i < data->philo_n)
 	{
-		pthread_mutex_lock(&data->dead);
-		pthread_mutex_lock(&data->eat);
+		pthread_mutex_lock(&data->state_mutex);
 		now = get_current_time();
-		if (now - data->philo[i].last_eat >= data->t_die \
-					&& data->philo[i].state != EATING)
+		if (now - data->philo[i].last_eat >= data->t_die && data->philo[i].state != EATING)
 		{
 			data->died = 1;
-			data->philo->state = DEAD;
-			philo_msg(data->philo, data->philo->id);
-			pthread_mutex_unlock(&data->dead);
-			pthread_mutex_unlock(&data->eat);
+			pthread_mutex_unlock(&data->state_mutex);
 			return (1);
 		}
-		pthread_mutex_unlock(&data->dead);
-		pthread_mutex_unlock(&data->eat);
+		pthread_mutex_unlock(&data->state_mutex);
 		i++;
 	}
 	return (0);
 }
 
-int	meal_check(t_data *data)
+int meal_check(t_data *data)
 {
-	int	i;
+    int i;
+    int all_ate;
 
-	i = 0;
-	while (i < data->philo_n && data->died != 1)
-	{
-		pthread_mutex_lock(&data->eat);
-		if (data->philo[i].meal_c < data->m_count)
-		{
-			pthread_mutex_unlock(&data->eat);
-			break ;
-		}
-		pthread_mutex_unlock(&data->eat);
-		i++;
-	}
-	if (i == data->philo_n)
-		return (1);
-	return (0);
+    i = 0;
+    all_ate = 1;
+    while (i < data->philo_n)
+    {
+        pthread_mutex_lock(&data->state_mutex);
+        if (data->philo[i].meal_c >= data->m_count && !data->philo[i].meal_complete)
+        {
+            data->total_meals++;
+            data->philo[i].meal_complete = 1;
+        }
+        pthread_mutex_unlock(&data->state_mutex);
+        i++;
+    }
+    return (all_ate && data->total_meals == data->philo_n);
 }
 
 int	work(t_data *data)

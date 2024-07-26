@@ -6,7 +6,7 @@
 /*   By: dkremer <dkremer@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 13:22:44 by dkremer           #+#    #+#             */
-/*   Updated: 2024/07/25 01:34:37 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/07/26 17:50:47 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,11 @@ typedef struct s_philo
 {
 	int				id;
 	int				meal_c;
-	long int		last_eat;
-	long int		start;
-	struct s_data	*data;
+	int				meal_complete;
 	t_state			state;
+	long int		start;
+	long int		last_eat;
+	struct s_data	*data;
 	pthread_t		thread;
 	pthread_mutex_t	*r_fork;
 	pthread_mutex_t	*l_fork;
@@ -50,8 +51,7 @@ typedef struct s_data
 	t_philo			*philo;
 	pthread_mutex_t	*forks;	
 	pthread_mutex_t	msg;
-	pthread_mutex_t	eat;
-	pthread_mutex_t	dead;
+	pthread_mutex_t	state_mutex;
 }					t_data;
 
 #endif

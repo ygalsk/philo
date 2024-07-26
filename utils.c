@@ -28,13 +28,13 @@ void	ft_usleep(size_t milliseconds, t_data *data)
 	start = get_current_time();
 	while ((get_current_time() - start < milliseconds))
 	{
-		pthread_mutex_lock(&data->dead);
+		pthread_mutex_lock(&data->state_mutex);
 		if (data->died == true)
 		{
-			pthread_mutex_unlock(&data->dead);
+			pthread_mutex_unlock(&data->state_mutex);
 			return ;
 		}
-		pthread_mutex_unlock(&data->dead);
+		pthread_mutex_unlock(&data->state_mutex);
 		usleep(200);
 	}
 }
