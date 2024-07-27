@@ -6,7 +6,7 @@
 /*   By: dkremer <dkremer@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 13:22:44 by dkremer           #+#    #+#             */
-/*   Updated: 2024/07/26 17:50:47 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/07/27 20:58:28 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ typedef struct s_philo
 typedef struct s_data
 {
 	int				philo_n;
-	int				t_die;
-	int				t_eat;
-	int				t_sleep;
+	long int		t_die;
+	long int		t_eat;
+	long int		t_sleep;
 	int				m_count;
 	int				died;
 	int				error;

@@ -6,7 +6,7 @@
 /*   By: dkremer <dkremer@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 15:28:22 by dkremer           #+#    #+#             */
-/*   Updated: 2024/07/26 17:50:40 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/07/27 21:00:33 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,6 @@ void	philo_msg(t_philo *philo);
 void	*philo(void *philo);
 int		meal_check(t_data *data);
 int		time_check(t_data *data);
+int		checker(t_philo *philo);
+
 #endif

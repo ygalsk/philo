@@ -6,11 +6,12 @@
 /*   By: dkremer <dkremer@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 16:28:48 by dkremer           #+#    #+#             */
-/*   Updated: 2024/07/25 02:33:10 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/07/27 21:00:28 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/philo.h"
+#include <pthread.h>
 
 size_t	get_current_time(void)
 {
@@ -25,18 +26,10 @@ void	ft_usleep(size_t milliseconds, t_data *data)
 {
 	size_t	start;
 
+	(void)data;
 	start = get_current_time();
 	while ((get_current_time() - start < milliseconds))
-	{
-		pthread_mutex_lock(&data->state_mutex);
-		if (data->died == true)
-		{
-			pthread_mutex_unlock(&data->state_mutex);
-			return ;
-		}
-		pthread_mutex_unlock(&data->state_mutex);
 		usleep(200);
-	}
 }
 
 int	ft_isdigit(const char *c)
@@ -72,8 +65,8 @@ int	ft_atoi(const char *str)
 	i = 0;
 	sgn = 1;
 	res = 0;
-	while (str[i] == ' ' || str[i] == '\n' || str[i] == '\t' || str[i] == '\r'
-		|| str[i] == '\v' || str[i] == '\f')
+	while (str[i] == ' ' || str[i] == '\n' || str[i] == '\t' || \
+					str[i] == '\r' || str[i] == '\v' || str[i] == '\f')
 		i++;
 	if (str[i] == '-' || str[i] == '+')
 	{
