@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkremer <dkremer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dkremer <dkremer@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 13:52:21 by dkremer           #+#    #+#             */
-/*   Updated: 2024/07/26 17:50:26 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/07/28 00:46:54 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ static int	init_mutex(t_data *data)
 	if (pthread_mutex_init(&data->msg, NULL))
 		return (1);
 	if (pthread_mutex_init(&data->state_mutex, NULL))
+		return (1);
+	if (pthread_mutex_init(&data->died_mutex, NULL))
 		return (1);
 	return (0);
 }

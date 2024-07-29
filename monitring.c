@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitring.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkremer <dkremer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dkremer <dkremer@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:53:45 by dkremer           #+#    #+#             */
-/*   Updated: 2024/07/27 21:53:01 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/07/29 13:23:46 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,12 @@ int	time_check(t_data *data)
 		if (now - data->philo[i].last_eat >= data->t_die && \
 				data->philo[i].state != EATING)
 		{
+			pthread_mutex_lock(&data->died_mutex);
 			data->died = 1;
+			pthread_mutex_unlock(&data->died_mutex);
 			data->philo[i].state = DEAD;
 			pthread_mutex_unlock(&data->state_mutex);
-			philo_msg(&data->philo[i]);
+			printf("%ld %d died\n", get_current_time() - data->philo[i].start, data->philo[i].id);
 			return (1);
 		}
 		pthread_mutex_unlock(&data->state_mutex);
@@ -63,13 +65,11 @@ int	meal_check(t_data *data)
 
 int	checker(t_philo *philo)
 {
-	int	i;
-
-	i = 0;
-	if (philo->data->died == 1 || philo->state == DEAD)
-		return (1);
 	if (time_check(philo->data))
+	{
+
 		return (1);
+	}
 	if (meal_check(philo->data))
 		return (1);
 	return (0);
@@ -78,13 +78,15 @@ int	checker(t_philo *philo)
 void	*monitor_routine(void *arg)
 {
 	t_data	*data;
+	int		stop;
 
 	data = (t_data *)arg;
-	while (1)
+	stop = 0;
+	while (!stop)
 	{
 		if (time_check(data) || meal_check(data))
-			break ;
-		usleep(100);
+			stop = 1;
+		usleep(1000);
 	}
 	return (NULL);
 }
@@ -92,6 +94,7 @@ void	*monitor_routine(void *arg)
 int	work(t_data *data)
 {
 	int			i;
+	int			stop;
 	t_philo		*philo_data;
 	pthread_t	monitor_thread;
 
@@ -101,6 +104,14 @@ int	work(t_data *data)
 	while (++i < data->philo_n)
 	{
 		philo_data = &data->philo[i];
+		pthread_mutex_lock(&data->died_mutex);
+		stop = data->died;
+		pthread_mutex_unlock(&data->died_mutex);
+		if (stop)
+		{
+
+			break ;
+		}
 		if (pthread_create(&philo_data->thread, NULL, &philo, philo_data))
 			return (free_and_exit(data), error("THREAD ERROR!\n"));
 	}

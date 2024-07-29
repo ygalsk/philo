@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkremer <dkremer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dkremer <dkremer@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 16:51:32 by dkremer           #+#    #+#             */
-/*   Updated: 2024/07/27 21:48:23 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/07/29 13:18:44 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,9 @@ void	free_and_exit(t_data *data)
 		free(data->forks);
 		data->forks = NULL;
 	}
+	pthread_mutex_destroy(&data->state_mutex);
+	pthread_mutex_destroy(&data->msg);
+	pthread_mutex_destroy(&data->died_mutex);
 	exit(1);
 }
 
@@ -47,10 +50,9 @@ void	philo_msg(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->data->msg);
 	pthread_mutex_lock(&philo->data->state_mutex);
-	if (philo->state == DEAD)
-		printf("%ld %d died\n", get_current_time() - philo->start, \
-						philo->id);
-	else if (philo->state == FORKING)
+//	if (philo->state == DEAD)
+//		printf("%ld %d died\n", get_current_time() - philo->start, philo->id);
+	if (philo->state == FORKING)
 		printf("%ld %d has taken a fork\n", get_current_time() - philo->start, \
 						philo->id);
 	else if (philo->state == EATING)
@@ -62,8 +64,6 @@ void	philo_msg(t_philo *philo)
 	else if (philo->state == THINKING)
 		printf("%ld %d is thinking\n", get_current_time() - philo->start, \
 						philo->id);
-	if (philo->state == DEAD || philo->data->died == 1)
-		free_and_exit(philo->data);
 	pthread_mutex_unlock(&philo->data->msg);
 	pthread_mutex_unlock(&philo->data->state_mutex);
 }
