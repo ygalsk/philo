@@ -6,7 +6,7 @@
 /*   By: dkremer <dkremer@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:53:45 by dkremer           #+#    #+#             */
-/*   Updated: 2024/07/29 13:23:46 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/07/30 22:46:30 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,14 @@
 int	time_check(t_data *data)
 {
 	int		i;
-	long	now;
 
-	i = 0;
-	while (i < data->philo_n)
+	i = -1;
+	if (check_death(data))
+		return (1);
+	while (++i < data->philo_n)
 	{
-		pthread_mutex_lock(&data->state_mutex);
-		now = get_current_time();
-		if (now - data->philo[i].last_eat >= data->t_die && \
-				data->philo[i].state != EATING)
-		{
-			pthread_mutex_lock(&data->died_mutex);
-			data->died = 1;
-			pthread_mutex_unlock(&data->died_mutex);
-			data->philo[i].state = DEAD;
-			pthread_mutex_unlock(&data->state_mutex);
-			printf("%ld %d died\n", get_current_time() - data->philo[i].start, data->philo[i].id);
+		if (set_death(data, i))
 			return (1);
-		}
-		pthread_mutex_unlock(&data->state_mutex);
-		i++;
 	}
 	return (0);
 }
@@ -42,10 +30,8 @@ int	time_check(t_data *data)
 int	meal_check(t_data *data)
 {
 	int	i;
-	int	all_ate;
 
 	i = 0;
-	all_ate = 1;
 	if (data->m_count == -1)
 		return (0);
 	while (i < data->philo_n)
@@ -60,17 +46,23 @@ int	meal_check(t_data *data)
 		pthread_mutex_unlock(&data->state_mutex);
 		i++;
 	}
-	return (all_ate && data->total_meals == data->philo_n);
+	pthread_mutex_lock(&data->state_mutex);
+	if (data->total_meals == data->philo_n)
+	{
+		pthread_mutex_unlock(&data->state_mutex);
+		return (1);
+	}
+	pthread_mutex_unlock(&data->state_mutex);
+	return (0);
 }
 
 int	checker(t_philo *philo)
 {
 	if (time_check(philo->data))
-	{
-
 		return (1);
-	}
 	if (meal_check(philo->data))
+		return (1);
+	if (check_death(philo->data))
 		return (1);
 	return (0);
 }
@@ -84,7 +76,7 @@ void	*monitor_routine(void *arg)
 	stop = 0;
 	while (!stop)
 	{
-		if (time_check(data) || meal_check(data))
+		if (time_check(data) || meal_check(data) || check_death(data))
 			stop = 1;
 		usleep(1000);
 	}
@@ -97,10 +89,12 @@ int	work(t_data *data)
 	int			stop;
 	t_philo		*philo_data;
 	pthread_t	monitor_thread;
+	int			threads_created;
 
 	i = -1;
+	threads_created = 0;
 	if (pthread_create(&monitor_thread, NULL, &monitor_routine, data))
-		return (free_and_exit(data), error("MONITOR THREAD ERROR!\n"));
+		return (error("MONITOR THREAD ERROR!\n"));
 	while (++i < data->philo_n)
 	{
 		philo_data = &data->philo[i];
@@ -108,22 +102,23 @@ int	work(t_data *data)
 		stop = data->died;
 		pthread_mutex_unlock(&data->died_mutex);
 		if (stop)
+			break ;
+		if (pthread_create(&philo_data->thread, NULL, &philo, philo_data))
 		{
-
+			error("THREAD ERROR!\n");
 			break ;
 		}
-		if (pthread_create(&philo_data->thread, NULL, &philo, philo_data))
-			return (free_and_exit(data), error("THREAD ERROR!\n"));
+		threads_created++;
 	}
 	i = -1;
-	while (++i < data->philo_n)
+	while (++i < threads_created)
 	{
 		philo_data = &data->philo[i];
 		if (pthread_join(philo_data->thread, NULL))
-			return (free_and_exit(data), error("THREAD JOIN ERROR!\n"));
+			return (error("THREAD JOIN ERROR!\n"));
 	}
 	if (pthread_join(monitor_thread, NULL))
-		return (free_and_exit(data), error("MONITOR THREAD JOIN ERROR!\n"));
+		return (error("MONITOR THREAD JOIN ERROR!\n"));
 	free_and_exit(data);
 	return (0);
 }

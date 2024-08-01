@@ -6,7 +6,7 @@
 /*   By: dkremer <dkremer@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 16:51:32 by dkremer           #+#    #+#             */
-/*   Updated: 2024/07/29 13:18:44 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/07/30 22:45:13 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,42 @@ int	error(char *msg)
 	write(2, msg, ft_strlen(msg));
 	write(2, "\n", 1);
 	return (1);
+}
+
+int	set_death(t_data *data, int i)
+{
+	long	now;
+
+	pthread_mutex_lock(&data->state_mutex);
+	now = get_current_time();
+	if (now - data->philo[i].last_eat >= data->t_die \
+		&& data->philo[i].state != EATING)
+	{
+		pthread_mutex_lock(&data->died_mutex);
+		data->died = 1;
+		pthread_mutex_unlock(&data->died_mutex);
+		data->philo[i].state = DEAD;
+		pthread_mutex_unlock(&data->state_mutex);
+		pthread_mutex_lock(&data->msg);
+		printf("%ld %d died\n", get_current_time() - data->philo[i].start, \
+			data->philo[i].id);
+		pthread_mutex_unlock(&data->msg);
+		return (1);
+	}
+	pthread_mutex_unlock(&data->state_mutex);
+	return (0);
+}
+
+int	check_death(t_data *data)
+{
+	pthread_mutex_lock(&data->died_mutex);
+	if (data->died)
+	{
+		pthread_mutex_unlock(&data->died_mutex);
+		return (1);
+	}
+	pthread_mutex_unlock(&data->died_mutex);
+	return (0);
 }
 
 void	free_and_exit(t_data *data)
@@ -48,10 +84,10 @@ void	free_and_exit(t_data *data)
 
 void	philo_msg(t_philo *philo)
 {
+	if (check_death(philo->data))
+		return ;
 	pthread_mutex_lock(&philo->data->msg);
 	pthread_mutex_lock(&philo->data->state_mutex);
-//	if (philo->state == DEAD)
-//		printf("%ld %d died\n", get_current_time() - philo->start, philo->id);
 	if (philo->state == FORKING)
 		printf("%ld %d has taken a fork\n", get_current_time() - philo->start, \
 						philo->id);

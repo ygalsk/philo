@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkremer <dkremer@student.42heilbronn.de>   +#+  +:+       +#+        */
+/*   By: dkremer <dkremer@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 16:28:48 by dkremer           #+#    #+#             */
-/*   Updated: 2024/07/27 21:00:28 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/07/30 22:45:51 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ void	ft_usleep(size_t milliseconds, t_data *data)
 {
 	size_t	start;
 
-	(void)data;
+	if (check_death(data))
+		return ;
 	start = get_current_time();
 	while ((get_current_time() - start < milliseconds))
 		usleep(200);
