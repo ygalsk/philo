@@ -6,7 +6,7 @@
 /*   By: dkremer <dkremer@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:53:45 by dkremer           #+#    #+#             */
-/*   Updated: 2024/07/30 22:46:30 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/08/01 16:31:54 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,31 +86,16 @@ void	*monitor_routine(void *arg)
 int	work(t_data *data)
 {
 	int			i;
-	int			stop;
 	t_philo		*philo_data;
 	pthread_t	monitor_thread;
 	int			threads_created;
 
 	i = -1;
 	threads_created = 0;
+	philo_data = data->philo;
 	if (pthread_create(&monitor_thread, NULL, &monitor_routine, data))
 		return (error("MONITOR THREAD ERROR!\n"));
-	while (++i < data->philo_n)
-	{
-		philo_data = &data->philo[i];
-		pthread_mutex_lock(&data->died_mutex);
-		stop = data->died;
-		pthread_mutex_unlock(&data->died_mutex);
-		if (stop)
-			break ;
-		if (pthread_create(&philo_data->thread, NULL, &philo, philo_data))
-		{
-			error("THREAD ERROR!\n");
-			break ;
-		}
-		threads_created++;
-	}
-	i = -1;
+	threads_created = create_threads(philo_data, data);
 	while (++i < threads_created)
 	{
 		philo_data = &data->philo[i];

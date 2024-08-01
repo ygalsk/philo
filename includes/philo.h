@@ -6,7 +6,7 @@
 /*   By: dkremer <dkremer@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 15:28:22 by dkremer           #+#    #+#             */
-/*   Updated: 2024/07/30 17:16:08 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/08/01 16:31:22 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ void	*philo(void *philo);
 int		meal_check(t_data *data);
 int		time_check(t_data *data);
 int		checker(t_philo *philo);
-int     check_death(t_data *data);
-int	    set_death(t_data *data, int i);
+int		check_death(t_data *data);
+int		set_death(t_data *data, int i);
+int		create_threads(t_philo *philo_data, t_data *data);
 
 #endif
