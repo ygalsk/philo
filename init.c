@@ -6,7 +6,7 @@
 /*   By: dkremer <dkremer@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 13:52:21 by dkremer           #+#    #+#             */
-/*   Updated: 2024/07/29 22:14:00 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/08/01 20:16:48 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ static int	init_mutex(t_data *data)
 	if (pthread_mutex_init(&data->msg, NULL))
 		return (1);
 	if (pthread_mutex_init(&data->state_mutex, NULL))
+		return (1);
+	if (pthread_mutex_init(&data->eating_mutex, NULL))
 		return (1);
 	if (pthread_mutex_init(&data->died_mutex, NULL))
 		return (1);

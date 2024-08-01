@@ -6,7 +6,7 @@
 /*   By: dkremer <dkremer@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:53:45 by dkremer           #+#    #+#             */
-/*   Updated: 2024/08/01 16:31:54 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/08/01 20:17:55 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,23 +36,23 @@ int	meal_check(t_data *data)
 		return (0);
 	while (i < data->philo_n)
 	{
-		pthread_mutex_lock(&data->state_mutex);
+		pthread_mutex_lock(&data->eating_mutex);
 		if (data->philo[i].meal_c >= data->m_count && \
 				!data->philo[i].meal_complete)
 		{
 			data->total_meals++;
 			data->philo[i].meal_complete = 1;
 		}
-		pthread_mutex_unlock(&data->state_mutex);
+		pthread_mutex_unlock(&data->eating_mutex);
 		i++;
 	}
-	pthread_mutex_lock(&data->state_mutex);
+	pthread_mutex_lock(&data->eating_mutex);
 	if (data->total_meals == data->philo_n)
 	{
-		pthread_mutex_unlock(&data->state_mutex);
+		pthread_mutex_unlock(&data->eating_mutex);
 		return (1);
 	}
-	pthread_mutex_unlock(&data->state_mutex);
+	pthread_mutex_unlock(&data->eating_mutex);
 	return (0);
 }
 
@@ -78,7 +78,7 @@ void	*monitor_routine(void *arg)
 	{
 		if (time_check(data) || meal_check(data) || check_death(data))
 			stop = 1;
-		usleep(1000);
+		usleep(500);
 	}
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: dkremer <dkremer@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:07:08 by dkremer           #+#    #+#             */
-/*   Updated: 2024/07/30 22:48:47 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/08/01 20:20:11 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,11 @@ int	eating(t_philo *philo)
 	}
 	pthread_mutex_lock(&philo->data->state_mutex);
 	philo->state = EATING;
+	pthread_mutex_unlock(&philo->data->state_mutex);
+	pthread_mutex_lock(&philo->data->eating_mutex);
 	philo->last_eat = get_current_time();
 	philo->meal_c++;
-	pthread_mutex_unlock(&philo->data->state_mutex);
+	pthread_mutex_unlock(&philo->data->eating_mutex);
 	philo_msg(philo);
 	ft_usleep(philo->data->t_eat, philo->data);
 	pthread_mutex_unlock(philo->l_fork);
@@ -94,6 +96,7 @@ void	*philo(void *philo)
 			break ;
 		if (thinking(philo_data) || checker(philo_data))
 			break ;
+		usleep(100);
 	}
 	return (NULL);
 }
