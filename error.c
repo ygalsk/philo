@@ -6,17 +6,17 @@
 /*   By: dkremer <dkremer@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 16:51:32 by dkremer           #+#    #+#             */
-/*   Updated: 2024/08/01 20:23:32 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/08/07 20:16:31 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/philo.h"
 
+// write(2, "\n", 1);
 int	error(char *msg)
 {
 	write(2, "Error: ", 7);
 	write(2, msg, ft_strlen(msg));
-	write(2, "\n", 1);
 	return (1);
 }
 
@@ -24,8 +24,8 @@ int	set_death(t_data *data, int i)
 {
 	long	now;
 
-	// pthread_mutex_lock(&data->eating_mutex);
 	pthread_mutex_lock(&data->state_mutex);
+	pthread_mutex_lock(&data->eating_mutex);
 	now = get_current_time();
 	if (now - data->philo[i].last_eat >= data->t_die \
 		&& data->philo[i].state != EATING)
@@ -34,14 +34,15 @@ int	set_death(t_data *data, int i)
 		data->died = 1;
 		pthread_mutex_unlock(&data->died_mutex);
 		data->philo[i].state = DEAD;
+		pthread_mutex_unlock(&data->eating_mutex);
 		pthread_mutex_unlock(&data->state_mutex);
-		// pthread_mutex_unlock(&data->eating_mutex);
 		pthread_mutex_lock(&data->msg);
 		printf("%ld %d died\n", get_current_time() - data->philo[i].start, \
 			data->philo[i].id);
 		pthread_mutex_unlock(&data->msg);
 		return (1);
 	}
+	pthread_mutex_unlock(&data->eating_mutex);
 	pthread_mutex_unlock(&data->state_mutex);
 	return (0);
 }
@@ -82,7 +83,8 @@ void	free_and_exit(t_data *data)
 	pthread_mutex_destroy(&data->eating_mutex);
 	pthread_mutex_destroy(&data->msg);
 	pthread_mutex_destroy(&data->died_mutex);
-	exit(1);
+	pthread_mutex_destroy(&data->sleeping_mutex);
+	return ;
 }
 
 void	philo_msg(t_philo *philo)

@@ -6,7 +6,7 @@
 /*   By: dkremer <dkremer@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:07:08 by dkremer           #+#    #+#             */
-/*   Updated: 2024/08/01 20:20:11 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/08/07 20:41:11 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ int	sleeping(t_philo *philo)
 {
 	if (check_death(philo->data))
 		return (1);
-	pthread_mutex_lock(&philo->data->state_mutex);
+	pthread_mutex_lock(&philo->data->sleeping_mutex);
 	philo->state = SLEEPING;
-	pthread_mutex_unlock(&philo->data->state_mutex);
+	pthread_mutex_unlock(&philo->data->sleeping_mutex);
 	philo_msg(philo);
 	ft_usleep(philo->data->t_sleep, philo->data);
 	return (0);
@@ -26,8 +26,17 @@ int	sleeping(t_philo *philo)
 
 int	thinking(t_philo *philo)
 {
+	long	tt_think;
+
 	if (check_death(philo->data))
 		return (1);
+	if (philo->data->philo_n % 2)
+	{
+		tt_think = (philo->data->t_eat * 2) - philo->data->t_sleep;
+		if (tt_think < 0)
+			tt_think = 0;
+		ft_usleep(tt_think, philo->data);
+	}
 	pthread_mutex_lock(&philo->data->state_mutex);
 	philo->state = THINKING;
 	pthread_mutex_unlock(&philo->data->state_mutex);
@@ -60,7 +69,11 @@ static int	forking(t_philo *philo)
 int	eating(t_philo *philo)
 {
 	if (forking(philo))
+	{
+		pthread_mutex_unlock(philo->l_fork);
+		pthread_mutex_unlock(philo->r_fork);
 		return (1);
+	}
 	if (check_death(philo->data))
 	{
 		pthread_mutex_unlock(philo->l_fork);
@@ -87,7 +100,7 @@ void	*philo(void *philo)
 
 	philo_data = (t_philo *)philo;
 	if (philo_data->id % 2)
-		ft_usleep(philo_data->data->t_die / 2, philo_data->data);
+		ft_usleep((philo_data->data->t_die / 2), philo_data->data);
 	while (1)
 	{
 		if (eating(philo_data) || checker(philo_data))
@@ -96,7 +109,6 @@ void	*philo(void *philo)
 			break ;
 		if (thinking(philo_data) || checker(philo_data))
 			break ;
-		usleep(100);
 	}
 	return (NULL);
 }

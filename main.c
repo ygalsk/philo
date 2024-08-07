@@ -6,13 +6,11 @@
 /*   By: dkremer <dkremer@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 15:31:44 by dkremer           #+#    #+#             */
-/*   Updated: 2024/07/26 17:50:55 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/08/07 17:25:18 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/philo.h"
-#include <stdio.h>
-#include <unistd.h>
 
 int	check_args(int argc, char **argv)
 {

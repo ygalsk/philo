@@ -6,7 +6,7 @@
 /*   By: dkremer <dkremer@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 13:22:44 by dkremer           #+#    #+#             */
-/*   Updated: 2024/08/01 20:16:18 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/08/05 16:44:30 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef struct s_data
 	pthread_mutex_t	msg;
 	pthread_mutex_t	state_mutex;
 	pthread_mutex_t	eating_mutex;
+	pthread_mutex_t	sleeping_mutex;
 	pthread_mutex_t	died_mutex;
 }					t_data;
 

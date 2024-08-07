@@ -6,7 +6,7 @@
 /*   By: dkremer <dkremer@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 15:28:22 by dkremer           #+#    #+#             */
-/*   Updated: 2024/08/01 16:31:22 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/08/07 17:31:26 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,21 @@ int		ft_isdigit(const char *c);
 size_t	ft_strlen(const char *s);
 int		ft_atoi(const char *str);
 int		error(char *msg);
+void	free_and_exit(t_data *data);
+//init
 int		init_thread(t_data *data);
 int		init_data(t_data *data, int argc, char **argv);
-int		work(t_data *data);
-void	free_and_exit(t_data *data);
+//philo stuff
 void	philo_msg(t_philo *philo);
 void	*philo(void *philo);
+//checkers
 int		meal_check(t_data *data);
 int		time_check(t_data *data);
 int		checker(t_philo *philo);
 int		check_death(t_data *data);
 int		set_death(t_data *data, int i);
+//threads
 int		create_threads(t_philo *philo_data, t_data *data);
+int		work(t_data *data);
 
 #endif

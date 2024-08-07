@@ -6,7 +6,7 @@
 #    By: dkremer <dkremer@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/03 13:57:13 by dkremer           #+#    #+#              #
-#    Updated: 2024/07/30 16:51:46 by dkremer          ###   ########.fr        #
+#    Updated: 2024/08/07 17:21:37 by dkremer          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,14 +15,14 @@ NAME     = philo
 
 # Compiler and flags
 CC       = cc
-CFLAGS   = -Wall -Werror -Wextra -Iincludes -g3
+CFLAGS   = -Wall -Werror -Wextra -Iincludes -g3 -o3
 LDFLAGS = -lpthread
 
 # Source and object directories
 BINDIR   = bin
 
 # Source files
-SRCS     = $(wildcard ./*.c)
+SRCS     = error.c init.c main.c monitoring.c threading.c utils.c work.c
 
 # Object files
 OBJS     = $(SRCS:./%.c=$(BINDIR)/%.o)
